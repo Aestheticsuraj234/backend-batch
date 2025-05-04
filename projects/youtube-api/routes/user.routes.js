@@ -98,6 +98,11 @@ router.put("/update-profile", checkAuth , async (req, res) => {
 
     // Handle profile picture update
     if (req.files && req.files.logo) {
+
+      //if wanted to update then 1st destroy the previous
+      await cloudinary.uploader.destroy(user.logoId);
+
+      //then upload new one
       const uploadedImage = await cloudinary.uploader.upload(req.files.logo.tempFilePath);
       updatedData.logoUrl = uploadedImage.secure_url;
       updatedData.logoId = uploadedImage.public_id;
